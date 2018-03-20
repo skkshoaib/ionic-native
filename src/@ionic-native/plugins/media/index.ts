@@ -14,6 +14,10 @@ export class MediaObject {
   onSuccess: Observable<any>;
 
   /**
+   * An observable that notifies you media has been initialized. It returns duration of media 
+   */
+  onInitialized: Observable<Number>;
+  /**
    * An observable that notifies you when an error occurs
    */
   onError: Observable<MEDIA_ERROR>;
@@ -29,6 +33,11 @@ export class MediaObject {
   @InstanceProperty
   successCallback: Function;
 
+  /**
+   * @hidden
+   */
+  @InstanceProperty
+  initializedCallback: Function;
   /**
    * @hidden
    */
@@ -50,6 +59,10 @@ export class MediaObject {
     this.onError = new Observable<MEDIA_ERROR>((observer: Observer<MEDIA_ERROR>) => {
       this.errorCallback = observer.next.bind(observer);
       return () => this.errorCallback = () => {};
+    });
+    this.onInitialized = new Observable<Number>((observer: Observer<Number>) => {
+      this.initializedCallback = observer.next.bind(observer);
+      return () => this.initializedCallback = () => {};
     });
 
     this.onStatusUpdate = new Observable<MEDIA_STATUS>((observer: Observer<MEDIA_STATUS>) => {
@@ -206,6 +219,8 @@ export type MediaErrorCallback = (error: MediaError) => void;
  * // to listen to plugin events:
  *
  * file.onStatusUpdate.subscribe(status => console.log(status)); // fires when file status changes
+
+ * file.onInitialized.subscribe(number => console.log(number)); // fires when file is initialized
  *
  * file.onSuccess.subscribe(() => console.log('Action is successful'));
  *
