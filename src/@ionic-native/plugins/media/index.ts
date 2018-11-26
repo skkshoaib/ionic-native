@@ -349,12 +349,12 @@ export class Media extends IonicNativePlugin {
    * @param src {string} A URI containing the audio content.
    * @return {MediaObject}
    */
-  create(src: string): MediaObject {
+  create(src: string, rate: number): MediaObject {
     let instance: any;
 
     if (checkAvailability(Media.getPluginRef(), null, Media.getPluginName()) === true) {
       // Creates a new media object
-      instance = new (Media.getPlugin())(src);
+      instance = new (Media.getPlugin())(src, rate);
     }
 
     return new MediaObject(instance);
